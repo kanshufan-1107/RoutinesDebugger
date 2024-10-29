@@ -1,0 +1,536 @@
+﻿<Window x:Class="RoutineHelper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RoutineHelper"
+        xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
+        mc:Ignorable="d" x:Name="MainWindowLayout"
+        Title="策略编辑器" Height="800" Width="1100"
+        AllowDrop="True" Loaded="MainWindowLayout_Loaded">
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="374*"/>
+            <ColumnDefinition Width="320"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="120" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="82.5"/>
+                    <ColumnDefinition Width="296*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Image Width="82.5" gif:AnimationBehavior.SourceUri="/res/RoutineHelper.gif" />
+
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" x:Name="SelectionLayout" Margin="2">
+                        <ComboBox
+                              Height="{Binding ElementName=SelectionLayout, Path=ActualHeight}"
+				                x:Name="RoutineComboBox"
+                                SelectionChanged="RoutineComboBox_SelectionChanged"
+				                IsEnabled="False"
+				                HorizontalAlignment="Stretch"
+				                VerticalAlignment="Top"
+                                VerticalContentAlignment="Center"
+				                Margin="0, 0, 35, 0"
+				                ToolTipService.ToolTip="可供使用的策略." />
+
+                        <Button
+				        x:Name="RoutineSelectionButton"
+                        Click="RoutineSelectionButton_Click"
+				        IsEnabled="False"
+				        Content="♻"
+				        HorizontalAlignment="Right"
+				        Margin="0"
+				        VerticalAlignment="Center"
+				        Width="{Binding ElementName=SelectionLayout, Path=ActualHeight}"
+				        Height="{Binding ElementName=SelectionLayout, Path=ActualHeight}"
+                        
+				        ToolTipService.ToolTip="重新编译AI." />
+                    </Grid>
+
+                    <Grid Grid.Row="1" x:Name="TestLayout" Margin="2">
+                        <TextBox
+                              Height="{Binding ElementName=SelectionLayout, Path=ActualHeight}"
+				                x:Name="TestPathBox"
+				                IsEnabled="False"
+				                HorizontalAlignment="Stretch"
+				                VerticalAlignment="Top"
+                                VerticalContentAlignment="Center"
+				                Margin="0, 0, 35, 0"
+				                ToolTipService.ToolTip="要使用的目标测试文件."/>
+
+                        <Button
+				        x:Name="TestSelectionButton"
+                        Click="TestSelectionButton_Click"
+				        IsEnabled="False"
+				        Content="🔍"
+				        HorizontalAlignment="Right"
+				        Margin="0"
+				        VerticalAlignment="Center"
+				        Width="{Binding ElementName=SelectionLayout, Path=ActualHeight}"
+				        Height="{Binding ElementName=SelectionLayout, Path=ActualHeight}"
+                        
+				        ToolTipService.ToolTip="选择目标测试文件." />
+                    </Grid>
+                    <Grid Grid.Row="2" Margin="2">
+                        <Button x:Name="ExecuteButton" Click="ExecuteButton_Click" Margin="0, 0, 35, 0" Content="测 试 牌 面" IsEnabled="False"></Button>
+                        <Button
+                            x:Name="DeleteLog"
+                            Click="DeleteLogButton_Click"
+                            Content="🗑"
+                            HorizontalAlignment="Right"
+                            Margin="0"
+                            VerticalAlignment="Center"
+                            Width="{Binding ElementName=SelectionLayout, Path=ActualHeight}"
+                            Height="{Binding ElementName=SelectionLayout, Path=ActualHeight}"
+
+                            ToolTipService.ToolTip="清空日志." />
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1" Margin="5">
+                <TabControl HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch" x:Name="ProgramTabControl"
+				Height="Auto" Width="Auto">
+                    <TabItem
+					Header="Mulligan Editor">
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.ColumnSpan="5" Content="留 牌 编 辑 器" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+                            <Label Grid.Row="1" Grid.Column="0" Content="待选卡牌" HorizontalAlignment="Left" VerticalAlignment="Center"></Label>
+                            <Label Grid.Row="1" Grid.Column="3" Content="我方职业" HorizontalAlignment="Left" VerticalAlignment="Center"></Label>
+                            <Label Grid.Row="2" Grid.Column="0" Content="留牌策略" HorizontalAlignment="Left" VerticalAlignment="Center"></Label>
+                            <Label Grid.Row="2" Grid.Column="3" Content="对方职业" HorizontalAlignment="Left" VerticalAlignment="Center"></Label>
+                            <Label Grid.Row="3" Grid.Column="0" Content="是否后手"  HorizontalAlignment="Left" VerticalAlignment="Center"></Label>
+                            <Label Grid.Row="3" Grid.Column="3" Content="手牌中包含" HorizontalAlignment="Left" VerticalAlignment="Center"></Label>
+                            <TextBox Margin="5" x:Name="MulliganCard" Grid.Row="1" Grid.Column="1" AcceptsReturn="False" ToolTip="输入卡牌 ID" VerticalContentAlignment="Center"></TextBox>
+                            <TextBox Margin="5" x:Name="MulliganHandCard" Grid.Row="3" Grid.Column="4" AcceptsReturn="False" ToolTip="输入卡牌 ID, 以 / 分隔" VerticalContentAlignment="Center"></TextBox>
+                            <ComboBox Margin="5" x:Name="MulliganStrategy" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="不留" Tag="Discard:2"/>
+                                <ComboBoxItem Content="留一张" Tag="Hold:1"/>
+                                <ComboBoxItem Content="留两张" Tag="Hold:2"/>
+
+                            </ComboBox>
+
+                            <ComboBox Margin="5" x:Name="MulliganOwnHero" Grid.Row="1" Grid.Column="4" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="全部" Tag="None"/>
+                                <ComboBoxItem Content="战士" Tag="warrior"/>
+                                <ComboBoxItem Content="法师" Tag="mage"/>
+                                <ComboBoxItem Content="牧师" Tag="preist"/>
+                                <ComboBoxItem Content="潜行者" Tag="thief"/>
+                                <ComboBoxItem Content="骑士" Tag="pala"/>
+                                <ComboBoxItem Content="术士" Tag="warlock"/>
+                                <ComboBoxItem Content="德鲁伊" Tag="druid"/>
+                                <ComboBoxItem Content="猎人" Tag="hunter"/>
+                                <ComboBoxItem Content="萨满" Tag="shaman"/>
+                                <ComboBoxItem Content="恶魔猎手" Tag="demonhunter"/>
+                            </ComboBox>
+                            <ComboBox Margin="5" x:Name="MulliganEnemyHero" Grid.Row="2" Grid.Column="4" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="全部" Tag="None"/>
+                                <ComboBoxItem Content="战士" Tag="warrior"/>
+                                <ComboBoxItem Content="法师" Tag="mage"/>
+                                <ComboBoxItem Content="牧师" Tag="preist"/>
+                                <ComboBoxItem Content="潜行者" Tag="thief"/>
+                                <ComboBoxItem Content="骑士" Tag="pala"/>
+                                <ComboBoxItem Content="术士" Tag="warlock"/>
+                                <ComboBoxItem Content="德鲁伊" Tag="druid"/>
+                                <ComboBoxItem Content="猎人" Tag="hunter"/>
+                                <ComboBoxItem Content="萨满" Tag="shaman"/>
+                                <ComboBoxItem Content="恶魔猎手" Tag="demonhunter"/>
+
+                            </ComboBox>
+                            <ComboBox Margin="5" x:Name="MulliganOrder" Grid.Row="3" Grid.Column="1" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="后手" Tag="GAME_005"/>
+                                <ComboBoxItem Content="先手" Tag=""/>
+
+                            </ComboBox>
+                            <Button Content="添 加 记 录" x:Name="AddMulliganButton" Grid.Row="4" Grid.ColumnSpan="1" Grid.Column="1" Margin="5" Click="AddMulliganButton_Click"></Button>
+                            <Button Content="删 除 末 尾 记 录" x:Name="RemoveMulliganButton" Grid.Row="4" Grid.ColumnSpan="1" Grid.Column="3" Margin="5" Click="RemoveMulliganButton_Click"></Button>
+
+                            <Border Margin="5" BorderBrush="Gray" BorderThickness="1" Grid.Row="5" Grid.RowSpan="4" Grid.ColumnSpan="5" Grid.Column="0">
+                                <ScrollViewer Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="4" Grid.RowSpan="4" x:Name="MulliganContentScrollViewer" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
+                                    <RichTextBox BorderThickness="0" Margin="5" ToolTipService.ShowDuration="120000" MouseMove="MulliganContentTextBlock_MouseEnter" x:Name="MulliganContentTextBlock"  Grid.Column="1" Grid.Row="5" Grid.RowSpan="4" Grid.ColumnSpan="4" IsEnabled="True">
+                                        <FlowDocument LineHeight="1" PageWidth="{Binding ElementName=MulliganContentTextBlock, Path=ActualWidth}">
+                                        </FlowDocument>
+                                    </RichTextBox>
+                                </ScrollViewer>
+                            </Border>
+                            
+                            <Image Grid.Row="5" Grid.RowSpan="4" Grid.Column="3" Source="https://art.hearthstonejson.com/v1/render/latest/zhCN/256x/ART_BOT_Bundle_001.png" x:Name="ToolTipCardPicture" />
+                            <Button Content="保 存 记 录" x:Name="SaveMulliganButton" Grid.Row="9" Grid.ColumnSpan="3" Grid.Column="1" Margin="5" Click="SaveMulliganButton_Click"></Button>
+
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="PlayfieldVisualizerTab"
+					Header="Playfield Visualizer">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Content="对 局 信 息" Padding="2" HorizontalContentAlignment="Center" />
+                            <Label Grid.Row="2" Grid.Column="0" Content="我 方 场 面" Padding="2" HorizontalContentAlignment="Center" />
+                            <Label Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="2" Content="敌 方 场 面" Padding="2" HorizontalContentAlignment="Center" />
+                            <Label Grid.Row="0" Grid.Column="2" Content="我 方 手 牌" Padding="2" HorizontalContentAlignment="Center" />
+                            <Label Grid.Row="0" Grid.Column="4" Content="我 方 牌 库" Padding="2" HorizontalContentAlignment="Center" />
+
+                            <Label Grid.Row="4" Grid.Column="0" Content="执 行 动 作" Padding="2" HorizontalContentAlignment="Center" />
+                            <Label Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3" Content="其 他 设 置" Padding="2" HorizontalContentAlignment="Center" />
+
+                            <ListBox x:Name="GeneralInfoListBox" Grid.Row="1" Grid.Column="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type local:InfoItem}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding Path=Item}" Padding="2" />
+                                            <Label Content="{Binding Path=Value}" Padding="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <ListBox x:Name="OwnMinionsListBox" Grid.Row="3" Grid.Column="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding Path=Status}" Padding="2" />
+                                            <StackPanel.ToolTip>
+                                                <ToolTip Background="Transparent" BorderThickness="0">
+                                                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                                                        <Image Source="{Binding Path=OnlineCardImage}" Width="200"></Image>
+                                                    </StackPanel>
+                                                </ToolTip>
+                                            </StackPanel.ToolTip>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <ListBox Grid.ColumnSpan="3" x:Name="EnemyMinionsListBox" Grid.Row="3" Grid.Column="2">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding Path=Status}" Padding="2" />
+                                            <StackPanel.ToolTip>
+                                                <ToolTip Background="Transparent" BorderThickness="0">
+                                                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                                                        <Image Source="{Binding Path=OnlineCardImage}" Width="200"></Image>
+                                                    </StackPanel>
+                                                </ToolTip>
+                                            </StackPanel.ToolTip>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <ListBox x:Name="OwnHandCardListBox" Grid.Row="1" Grid.Column="2">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding Path=Status}" Padding="2" />
+                                            <StackPanel.ToolTip>
+                                                <ToolTip Background="Transparent" BorderThickness="0">
+                                                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                                                        <Image Source="{Binding Path=OnlineCardImage}" Width="200"></Image>
+                                                    </StackPanel>
+                                                </ToolTip>
+                                            </StackPanel.ToolTip>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <ListBox x:Name="OwnDeckCardListBox" Grid.Row="1" Grid.Column="4">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding Path=Status}" Padding="2" />
+                                            <StackPanel.ToolTip>
+                                                <ToolTip Background="Transparent" BorderThickness="0">
+                                                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                                                        <Image Source="{Binding Path=OnlineCardImage}" Width="200"></Image>
+                                                    </StackPanel>
+                                                </ToolTip>
+                                            </StackPanel.ToolTip>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <ListBox x:Name="PlayfieldActionListBox" Grid.Row="5" Grid.Column="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type local:ActionItem}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding Path=Action}" Padding="2" />
+                                            <StackPanel.ToolTip>
+                                                <ToolTip Background="Transparent" BorderThickness="0">
+                                                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                                                        <Image Source="{Binding Path=Source}" Width="200"></Image>
+                                                        <Image Source="{Binding Path=Target}" Width="200"></Image>
+                                                    </StackPanel>
+                                                </ToolTip>
+                                            </StackPanel.ToolTip>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <Grid Grid.Row="5" Grid.Column="2" Margin="5" Grid.ColumnSpan="3" x:Name="OtherPlayfieldSettingLayout">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Label Padding="2" Grid.Row="0" Grid.Column="0" Content="局面显示:" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" />
+                                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="PlayfieldStepComboBox" SelectionChanged="PlayfieldStepComboBox_SelectionChanged" />
+                                <Label Padding="2" Grid.Row="1" Grid.Column="0" Content="策略评分:" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" />
+                                <Label x:Name="PlayfieldScoreLabel" Padding="2" Grid.Row="1" Grid.Column="1" Content="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" />
+
+                                <TextBox x:Name="PlayfieldSerializedTextBox" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" Width="{Binding ElementName=OtherPlayfieldSettingLayout, Path=ActualWidth}" />
+                            </Grid>
+                        </Grid>
+                        
+                    </TabItem>
+                    <TabItem
+					Header="Action Visualizer">
+                        <Grid Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="2*" />
+                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="1*" />
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.ColumnSpan="1" Padding="2" Margin="1" VerticalContentAlignment="Center" Content="Action Tree View:"></Label>
+                            <Label Grid.Row="0" Grid.ColumnSpan="1" Padding="2" Margin="1" VerticalContentAlignment="Center" Grid.Column="1" Content="Playfield Score: "></Label>
+                            <Label Grid.Row="0" Grid.ColumnSpan="1" Padding="2" Margin="1" VerticalContentAlignment="Center" Grid.Column="2" Content="{Binding BestScore}" HorizontalContentAlignment="Right"></Label>
+                            <Label Grid.Row="2" Grid.ColumnSpan="1" Padding="2" Margin="1" VerticalContentAlignment="Center" Grid.Column="1" Content="Options: "></Label>
+                            <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25" />
+                                    <RowDefinition Height="25" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <!--" Border BorderBrush="Gray" BorderThickness="1" Grid.ColumnSpan="99" Grid.RowSpan="99"></Border-->
+                                <Label Grid.Row="0" Grid.ColumnSpan="1" Margin="1" Padding="2" Grid.Column="0" Content="Highlight Path: "></Label>
+                                <ComboBox Grid.Row="0" Grid.Column="1" Margin="1" Padding="2" x:Name="ActionScoreComboBox" SelectionChanged="ActionScoreComboBox_SelectionChanged" />
+
+                            </Grid>
+                            <TreeView Grid.Column="0" Grid.Row="1" Margin="5" Grid.RowSpan="3" x:Name="ActionTreeView" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalAlignment="Stretch">
+                                <TreeView.Resources>
+                                    <HierarchicalDataTemplate DataType="{x:Type local:ActionItem}" ItemsSource="{Binding Items}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding Path=Score}" Padding="2" Foreground="{Binding Path=Decision}" />
+                                            <Label Content="{Binding Path=Action}" Padding="2" Foreground="{Binding Path=Decision}" />
+                                            <Button x:Name="VisualizePlayfieldButton" Content="Show" BorderBrush="Transparent" Background="Transparent" VerticalAlignment="Center" Click="VisualizePlayfieldButton_Click" Tag="{Binding }"></Button>
+                                            <StackPanel.ToolTip>
+                                                <ToolTip Background="Transparent" BorderThickness="0">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="{Binding Path=Source}" Width="200"></Image>
+                                                        <Image Source="{Binding Path=Target}" Width="200"></Image>
+                                                    </StackPanel>
+                                                </ToolTip>
+                                            </StackPanel.ToolTip>
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                      Color="Transparent" />
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                      Color="Black" />
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                      Color="Transparent" />
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
+                      Color="Black" />
+                                </TreeView.Resources>
+                            </TreeView>
+                            <ListBox x:Name="BestActionListBox" Margin="5" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type local:ActionItem}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding Path=Action}" Padding="2" />
+                                            <StackPanel.ToolTip>
+                                                <ToolTip Background="Transparent" BorderThickness="0">
+                                                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                                                        <Image Source="{Binding Path=Source}" Width="200"></Image>
+                                                        <Image Source="{Binding Path=Target}" Width="200"></Image>
+                                                    </StackPanel>
+                                                </ToolTip>
+                                            </StackPanel.ToolTip>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </TabItem>
+                    <TabItem
+					Header="Playfield Exporter">
+                        <Grid Margin="25">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="2"/>
+                                <ColumnDefinition Width="35"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Margin="5"
+                              Height="25"
+                                Grid.Row="0"
+                                Grid.Column="0"
+				                x:Name="ExportPathBox"
+				                IsEnabled="False"
+				                HorizontalAlignment="Stretch"
+				                VerticalAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+				                ToolTipService.ToolTip="要导出数据的目标文件夹." />
+
+                            <Button
+				        x:Name="ExportSelectionButton"
+                        Click="ExportSelectionButton_Click"
+                                Grid.Row="0"
+                                Grid.Column="2" Margin="5"
+                                HorizontalAlignment="Stretch"
+				        IsEnabled="False"
+				        Content="🔍"
+				        VerticalAlignment="Stretch"
+				        ToolTipService.ToolTip="Export all available state under the folder." />
+                            <Button Grid.Row="1" Grid.ColumnSpan="3" Margin="5" x:Name="GenerateButton" Click="GenerateButton_Click" Content="导 出 数 据" IsEnabled="False"></Button>
+                            <Button Grid.Row="2" Grid.ColumnSpan="3" Margin="5" x:Name="ExportCardButton" Click="ExportCardButton_Click" Content="导 出 卡 牌" IsEnabled="True"></Button>
+
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+            <GridSplitter
+				x:Name="gridSplitter_0"
+				Background="Gray"
+				ResizeDirection="Rows"
+				Grid.Row="2"
+				HorizontalAlignment="Stretch"
+				VerticalAlignment="Top"
+				ResizeBehavior="PreviousAndNext"
+				Height="1"
+				MaxHeight="1" Grid.ColumnSpan="2" Margin="0,0,0.2,0" Grid.RowSpan="2" />
+            <Grid Grid.Row="2" Margin="5">
+                <Border BorderBrush="Gray" BorderThickness="1">
+                    <ScrollViewer Name="LogScrollViewer">
+                        <RichTextBox x:Name="LogRichTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto">
+                            <FlowDocument>
+                                <Paragraph></Paragraph>
+                            </FlowDocument>
+                        </RichTextBox>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+
+        </Grid>
+        <Grid Grid.Column="1" x:Name="SidePanelLayout" >
+            <Grid Margin="5,5,5,5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="90*"/>
+                    <RowDefinition Height="29" />
+                </Grid.RowDefinitions>
+                <!--Label Content="值守账号选择:"/-->
+                <Grid Grid.Row="0">
+                    <TextBox x:Name="CardListSearchBox" IsEnabled="False" Margin="0,0,40,0" FontSize="14" VerticalContentAlignment="Center" Height="30" TextChanged="CardListSearchTextChanged" InputMethod.IsInputMethodEnabled="True" ContextMenu="{x:Null}" MaxLines="1"></TextBox>
+                    <Label Content="🔍" VerticalContentAlignment="Center" HorizontalAlignment="Right" FontSize="18"></Label>
+
+                </Grid>
+                <Grid Grid.Row="1">
+                    <!-- ProgressBar x:Name="CardListSearchProgressBar" VerticalAlignment="Top" /-->
+                </Grid>
+                <Grid Grid.Row="2" x:Name="SidePanelCardListBoxLayout">
+                    <ListBox x:Name="CardListBox" HorizontalContentAlignment="Left" Width="{Binding ElementName=SidePanelCardListBoxLayout, Path=ActualWidth}" Height="{Binding ElementName=SidePanelCardListBoxLayout, Path=ActualHeight}" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Width="14" Content="{Binding Path=cost}" Background="{Binding Path=Color}" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Left" FontSize="8" />
+                                    <!--Label Content="{Binding Path=Cost}" ToolTip="{Binding Path=Rarity}" Foreground="Black" Width="30" /-->
+                                    <!--Label Content="{Binding Path=CardId}" ToolTip="{Binding Path=TextCN}" Foreground="Black" Width="50" FontSize="8" VerticalContentAlignment="Center" /-->
+                                    <Label Content="{Binding Path=nameCN}" MouseDown="CardNameLabel_MouseDown" Foreground="Black" Width="105" Tag="{Binding Path=cardIDenum}">
+                                        <Label.ToolTip>
+                                            <ToolTip Placement="Right">
+                                                <ToolTip.Template>
+                                                    <ControlTemplate>
+                                                        <StackPanel>
+                                                            <!-- Margin="34,0,0,0" Fill="#e5AAAAAA" Data="M 0 16 L 16 0 L 32 16 Z"/-->
+                                                            <Image Width="200" Source="{Binding Path=OnlineCardImage}"/>
+                                                        </StackPanel>
+                                                    </ControlTemplate>
+                                                </ToolTip.Template>
+                                            </ToolTip>
+                                        </Label.ToolTip>
+                                    </Label>
+                                    <Label Content="{Binding Path=dbfId}" ToolTip="{Binding Path=CardInfo}" Foreground="Black" Width="65"/>
+                                    <Button Content="📝" ToolTip="复制卡牌 ID" Width="20" IsEnabled="True" Margin="0 0 5 0" x:Name="CopyCardButton" Click="CopyCardButton_Click" Tag="{Binding }" />
+                                    <Button Content="🔍" ToolTip="检查卡牌 Sim 文件" Width="20" IsEnabled="True" Margin="0 0 5 0" x:Name="CheckCardButton" Click="CheckCardButton_Click" Tag="{Binding }" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+                <Grid Grid.Row="3" x:Name="SidePanelStatusBarLayout">
+                    <Label x:Name="CardSearchStatusBar" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="{Binding ElementName=SidePanelStatusBarLayout, Path=ActualHeight}" VerticalAlignment="Top"  Width="{Binding ElementName=SidePanelStatusBarLayout, Path=ActualWidth}"/>
+                    <Button Content="⚙" x:Name="SettingsButton" Width="{Binding ElementName=SettingsButton, Path=ActualHeight}" HorizontalAlignment="Right" Click="SettingsButton_Click" Margin="5,5,0,5"></Button>
+                </Grid>
+            </Grid>
+            <GridSplitter HorizontalAlignment="Left" Height="{Binding ElementName=MainWindowLayout, Path=ActualHeight}" VerticalAlignment="Top" Width="1" Background="Gray" Foreground="Gray"/>
+        </Grid>
+    </Grid>
+
+</Window>
