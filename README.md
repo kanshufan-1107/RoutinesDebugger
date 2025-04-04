@@ -7,15 +7,17 @@
 
 > 1. 请在本项目的CompilerWindow.xaml.cs文件中自行添加以下相关代码
 >
-> ![代码修改](https://raw.githubusercontent.com/kanshufan-1107/HearthBuddyRoutinesDebugger/refs/heads/main/image/%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9.png)
+> ![代码修改](https://raw.githubusercontent.com/kanshufan-1107/RoutinesDebugger/refs/heads/main/image/%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9.png)
 >
 > 2. 根据`HB相关调整示例`文件夹下的相关文件, 调整相关代码
 >
 > + Ai.cs
->   + 搜索`APPLICATION_MODE`字符串找到对应的修改代码，根据对应的
->   
+>   + 搜索`APPLICATION_MODE`字符串找到对应的修改代码
+>
 > + MiniSimulator.cs
 >   + 搜索`APPLICATION_MODE`字符串找到对应的修改代码
+>
+>   ![image-20250404191717166](https://raw.githubusercontent.com/kanshufan-1107/HearthBuddyRoutinesDebugger/refs/heads/main/image/%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9-3.png)
 >   
 > + CardDB.cs
 >
